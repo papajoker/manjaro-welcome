@@ -150,7 +150,10 @@ class ManjaroAppView(WebKit.WebView):
             Popen(['khelpcenter'])
 
         elif uri == 'install':
-            Popen(['sudo', 'thus'])
+            if os.path.exists("/usr/bin/thus"):
+                Popen(['sudo', 'thus'])
+            if os.path.exists("/usr/bin/calamares"):
+                Popen(['sudo', 'calamares'])
 
         elif uri == 'install-cli':
             Popen(['manjaro-welcome-terminal', 'sudo setup'])
