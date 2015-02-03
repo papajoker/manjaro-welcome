@@ -152,7 +152,7 @@ class ManjaroAppView(WebKit.WebView):
         elif uri == 'install':
             if os.path.exists("/usr/bin/thus"):
                 Popen(['sudo', 'thus'])
-            elif os.path.exists("/usr/bin/calamares"):
+            if os.path.exists("/usr/bin/calamares"):
                 Popen(['sudo', 'calamares'])
 
         elif uri == 'install-cli':
@@ -180,14 +180,28 @@ class WelcomeApp(object):
         # establish our location
         self._location = os.path.dirname(os.path.abspath(inspect.getfile(
             inspect.currentframe())))
+	
+        #check lang
+        lang=os.environ["LANG"][0:2]
+        print('language: ',lang)
+        _data_path='data/'+lang+'/'
 
         # check for relative path
-        if os.path.exists(os.path.join(self._location, 'data/')):
-            print('Using relative path for data source. Non-production testing.')
-            self._data_path = os.path.join(self._location, 'data/')
+        if os.path.exists(os.path.join(self._location, _data_path)):
+            print('Using locale relative path for data source. Non-production testing.')
+            self._data_path = os.path.join(self._location, _data_path)
+        elif os.path.exists(os.path.join(self._location, 'data/en/')):
+            print('Using relative path (en) for data source. Non-production testing.')
+            self._data_path = os.path.join(self._location, 'data/en/')
         elif os.path.exists('/usr/share/manjaro-welcome/'):
             print('Using /usr/share/manjaro-welcome/ path.')
-            self._data_path = '/usr/share/manjaro-welcome/'
+            _data_path='/usr/share/manjaro-welcome/'+lang+'/'
+            if os.path.exists(os.path.join(self._location, _data_path)):
+                self._data_path = _data_path
+                print('using locale data directory: '+lang)
+            elif os.path.exists(os.path.join(self._location, '/usr/share/manjaro-welcome/en/')):
+                self._data_path = '/usr/share/manjaro-welcome/en/'
+                print('using "en" data directory')
         else:
             print('Unable to source the manjaro-welcome data directory.')
             exit(1)
@@ -201,7 +215,7 @@ class WelcomeApp(object):
         w.set_wmclass('Manjaro Welcome', 'Manjaro Welcome')
         w.set_title('Manjaro Welcome')
         w.set_size_request(768, 496)
-        w.set_icon_from_file(os.path.join(self._data_path, "img/favicon.png"))
+        w.set_icon_from_file(os.path.join(self._data_path, "../img/favicon.png"))
 
         # build webkit container
         mv = ManjaroAppView()
