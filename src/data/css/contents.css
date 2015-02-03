@@ -1,0 +1,17 @@
+/*
+ * Designed by Joshua Strot
+ */
+
+#codename::before {   content:"Bellatrix"	}
+#version::before {   content:"0.90"	}
+/* #arch::before {   content:"64-bit";	} */
+
+#navigation:lang(en) div::before {   content:"Back"	}
+#navigation:lang(fr) div::before {   content:"Retour"	}
+
+#close:lang(en)::before {   content:"Close"	}
+#close:lang(fr)::before {   content:"Fermer"	}
+
+#checkbox:lang(en) span::after {   content:"Show this dialog on startup?"	}
+#checkbox:lang(fr) span::after {   content:"Voir cette information au demarrage?"	}
+
